@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import urls
+from ai_features import ai_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include(urls)),
+    path('api/ai_features/', include(ai_urls))
 ]
