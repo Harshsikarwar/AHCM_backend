@@ -1,22 +1,31 @@
-databases:
-  - name: mysitedb
-    plan: free
-    databaseName: mysite
-    user: mysite
-
 services:
   - type: web
-    plan: free
-    name: mysite
+    name: hcm_backend
     runtime: python
-    buildCommand: './build.sh'
-    startCommand: 'python -m gunicorn mysite.asgi:application -k uvicorn.workers.UvicornWorker'
+    plan: free
+
+    buildCommand: "./build.sh"
+
+    startCommand: "gunicorn HCM.asgi:application -k uvicorn.workers.UvicornWorker"
+
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: mysitedb
-          property: connectionString
+      - key: PYTHON_VERSION
+        value: 3.13.5
+
       - key: SECRET_KEY
-        generateValue: true
-      - key: WEB_CONCURRENCY
-        value: 4
+        sync: false
+
+      - key: DEBUG
+        value: "False"
+
+      - key: DATABASE_URL
+        sync: false
+
+      - key: GEMINI_API_KEY
+        sync: false
+
+      - key: SUPABASE_URL
+        sync: false
+
+      - key: SUPABASE_KEY
+        sync: false
