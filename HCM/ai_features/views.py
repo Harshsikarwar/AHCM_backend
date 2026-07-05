@@ -203,14 +203,7 @@ Do not explain anything outside JSON.
                 status=500,
             )
         
-import os
-import json
 
-from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from supabase import create_client
-from google import genai
 
 
 class ResourceRedistributionView(APIView):
