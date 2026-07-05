@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     ".onrender.com",
     "127.0.0.1",
     "localhost",
+    "https://ahcm.vercel.app",
 ]
 
 
@@ -150,4 +151,5 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://your-frontend.onrender.com",
+    "https://ahcm.vercel.app",
 ]
