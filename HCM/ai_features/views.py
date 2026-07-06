@@ -115,7 +115,7 @@ class StockPredictionAPIView(APIView):
 
 class PatientFootfallAnalysisView(APIView):
 
-    def get(self, request):
+    def get(self, request, lang):
         try:
             # Fetch patient footfall data
             response = (
@@ -146,12 +146,29 @@ class PatientFootfallAnalysisView(APIView):
             prompt = f"""
 You are an AI healthcare analytics assistant.
 
+The user has selected the language: {lang}
+
 Analyze the following patient footfall data collected from PHCs/CHCs.
 
 Data:
 {data}
 
-Generate response strictly in JSON format:
+IMPORTANT RULES:
+
+1. Return ONLY valid JSON.
+2. Keep ALL JSON keys EXACTLY in English.
+3. Translate ONLY the text values into {lang}.
+4. Numeric values must remain numbers.
+5. The "recommendations" array must contain exactly 3 recommendations in {lang}.
+6. The values of "risk_level" must ONLY be:
+   - High
+   - Medium
+   - Low
+7. Do not translate the risk_level values.
+8. Do not include markdown.
+9. Do not add explanations outside JSON.
+
+Return exactly this JSON structure:
 
 {{
     "summary": "",
@@ -168,9 +185,6 @@ Generate response strictly in JSON format:
         ""
     ]
 }}
-
-Do not include markdown.
-Do not explain anything outside JSON.
 """
 
             result = client.models.generate_content(
@@ -208,7 +222,7 @@ Do not explain anything outside JSON.
 
 class ResourceRedistributionView(APIView):
 
-    def get(self, request):
+    def get(self, request, lang):
         try:
 
             # Fetch medicine stock with centre details
@@ -241,19 +255,36 @@ class ResourceRedistributionView(APIView):
             prompt = f"""
 You are an AI Healthcare Resource Optimization Assistant.
 
-Analyze the following medicine stock data from multiple PHCs/CHCs.
+The user has selected the language: {lang}
+
+Analyze the following medicine stock data collected from healthcare centres.
 
 Data:
 {stock_data}
 
-Identify:
-1. Centres having surplus medicine.
-2. Centres having shortage.
-3. Recommend redistribution between nearby centres (ignore actual distance for prototype).
-4. Explain why redistribution is required.
-5. Assign priority (High, Medium, Low).
+Your tasks:
 
-Return ONLY valid JSON.
+1. Identify centres having surplus medicine.
+2. Identify centres having shortage.
+3. Recommend redistribution between centres.
+4. Explain why redistribution is required.
+5. Assign priority.
+
+IMPORTANT RULES:
+
+1. Return ONLY valid JSON.
+2. Keep ALL JSON keys EXACTLY in English.
+3. Translate ONLY the text values into {lang}.
+4. Numeric values must remain numbers.
+5. Priority must ONLY be:
+   - High
+   - Medium
+   - Low
+6. Do not translate the priority values.
+7. Do not include markdown.
+8. Do not add explanations outside JSON.
+
+Return exactly this JSON:
 
 {{
     "summary": "",
